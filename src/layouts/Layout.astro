@@ -1,0 +1,102 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'AIを味方に、攻めの教育を。積木進之介のポートフォリオ兼活動発信サイト。',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header id="site-header">
+      <div class="header-inner">
+        <a href="/" class="logo">積木進之介</a>
+        <button class="menu-btn" aria-label="メニューを開く">
+          <span></span>
+          <span></span>
+        </button>
+        <nav id="main-nav" aria-label="メインナビゲーション">
+          <a href="/#about">About</a>
+          <a href="/#vision">Vision</a>
+          <a href="/activities/">Activity</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer id="site-footer">
+      <div class="footer-inner">
+        <p class="footer-name">積木進之介</p>
+        <p class="footer-copy">© 2024 Tsumuki Shinnosuke</p>
+      </div>
+    </footer>
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.07 }
+      );
+      document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+
+      const header = document.getElementById('site-header');
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (window.scrollY > 60) {
+            header?.classList.add('scrolled');
+          } else {
+            header?.classList.remove('scrolled');
+          }
+        },
+        { passive: true }
+      );
+
+      const menuBtn = document.querySelector('.menu-btn');
+      const mainNav = document.getElementById('main-nav');
+      menuBtn?.addEventListener('click', () => {
+        menuBtn.classList.toggle('open');
+        mainNav?.classList.toggle('open');
+        document.body.style.overflow = mainNav?.classList.contains('open') ? 'hidden' : '';
+      });
+      mainNav?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          menuBtn?.classList.remove('open');
+          mainNav.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      });
+    </script>
+  </body>
+</html>

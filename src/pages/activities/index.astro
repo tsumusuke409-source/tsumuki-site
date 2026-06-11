@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const activities = (await getCollection('activities')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout
+  title="Activity — 積木進之介"
+  description="積木進之介の活動記録。AI教育の授業実践、イベント登壇、日々の発信など。"
+>
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-subtitle fade-in">ACTIVITY</p>
+      <h1 class="page-title fade-in delay-1">活動報告</h1>
+    </div>
+  </div>
+
+  <div class="activity-list">
+    <div class="activity-list-grid">
+      {
+        activities.map((post, i) => (
+          <a
+            href={`/activities/${post.slug}/`}
+            class={`activity-card fade-in${i % 3 > 0 ? ` delay-${i % 3}` : ''}`}
+          >
+            <time class="card-date" datetime={post.data.date.toISOString()}>
+              {formatDate(post.data.date)}
+            </time>
+            <h2 class="card-title">{post.data.title}</h2>
+            <p class="card-desc">{post.data.description}</p>
+            {post.data.tags && (
+              <div class="card-tags">
+                {post.data.tags.map((tag) => (
+                  <span class="tag">#{tag}</span>
+                ))}
+              </div>
+            )}
+            <span class="card-arrow">→</span>
+          </a>
+        ))
+      }
+    </div>
+    {
+      activities.length === 0 && (
+        <p style="color: var(--text-muted); font-family: var(--font-display); letter-spacing: 0.1em;">
+          活動報告はまだありません。
+        </p>
+      )
+    }
+  </div>
+</Layout>

@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const activities = await getCollection('activities');
+  return activities.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout title={`${entry.data.title} — 積木進之介`} description={entry.data.description}>
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="article-meta">
+        <a href="/activities/" class="article-back">← 活動一覧</a>
+        <time class="article-date" datetime={entry.data.date.toISOString()}>
+          {formatDate(entry.data.date)}
+        </time>
+      </div>
+      <h1 class="article-title fade-in">{entry.data.title}</h1>
+      {
+        entry.data.tags && (
+          <div class="article-tags fade-in delay-1">
+            {entry.data.tags.map((tag) => (
+              <span class="tag">#{tag}</span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    entry.data.image && (
+      <div class="article-image-wrap container">
+        <img src={entry.data.image} alt={entry.data.title} />
+      </div>
+    )
+  }
+
+  <article class="article-body fade-in">
+    <Content />
+  </article>
+
+  <div class="article-footer">
+    <a href="/activities/" class="all-link">← 活動一覧に戻る</a>
+  </div>
+</Layout>

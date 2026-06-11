@@ -1,0 +1,171 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const activities = (await getCollection('activities'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout title="積木進之介 — AIを味方に、攻めの教育を。">
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="top">
+    <div class="hero-photo-side">
+      <div class="hero-photo-frame">
+        <img src="/images/hero.jpg" alt="積木進之介" loading="eager" />
+      </div>
+    </div>
+    <div class="hero-text-side">
+      <p class="hero-eyebrow fade-in">PORTFOLIO</p>
+      <h1 class="hero-name fade-in delay-1">
+        <span class="hero-name-jp">積木<br />進之介</span>
+        <span class="hero-name-en">TSUMUKI SHINNOSUKE</span>
+      </h1>
+      <div class="hero-rule fade-in delay-2"></div>
+      <p class="hero-tagline fade-in delay-2">AIを味方に、攻めの教育を。</p>
+      <p class="hero-sub fade-in delay-3">
+        子どもたちがAIを使いこなし、<br />創造する側に立つ未来をつくる
+      </p>
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section class="about-section section-pad" id="about">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-num">01</span>
+        <span class="section-label-text">ABOUT</span>
+      </div>
+      <div class="about-grid">
+        <div class="about-photo-col fade-in">
+          <div class="about-photo-frame">
+            <img src="/images/bodybuilding.jpg" alt="ボディビル大会 積木進之介" />
+          </div>
+          <p class="about-photo-caption">2024 ボディビル大会</p>
+        </div>
+        <div class="about-text-col fade-in delay-1">
+          <h2 class="about-name">積木 進之介</h2>
+          <p class="about-name-kana">つむき・しんのすけ</p>
+          <div class="about-rule"></div>
+          <div class="about-bio">
+            <p>
+              2002年4月生まれ。近畿大学情報学部卒。<br />現在は都内のIT企業に勤務。
+            </p>
+            <p>
+              教育×AIの分野で活動。子どもたちが「AIを使いこなし、創造する側に立つ」ための授業実践や情報発信を行う。
+            </p>
+            <p>
+              学生時代はボディビルに打ち込み、全国大会出場を経験。現在もトレーニングを趣味に、心身ともに鍛え続ける。
+            </p>
+          </div>
+          <div class="about-tags">
+            <span class="tag">#教育</span>
+            <span class="tag">#AI</span>
+            <span class="tag">#ボディビル</span>
+            <span class="tag">#IT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Vision ── -->
+  <section class="vision-section" id="vision">
+    <div class="vision-inner">
+      <div class="section-header section-header--light fade-in">
+        <span class="section-num">02</span>
+        <span class="section-label-text">VISION</span>
+      </div>
+      <blockquote class="vision-quote fade-in delay-1">
+        「週3時間で、<br />子どもは変わる」
+      </blockquote>
+      <div class="vision-body fade-in delay-2">
+        <p>
+          大学時代、個別指導塾の講師として働く中で、私は教育格差を肌で感じました。塾に通える子と、通えない子。その間には、本人の能力とは関係のない学力の差が生まれていました。
+        </p>
+        <p>
+          担当した生徒の一人は、成績が学年最下位に近い状態からのスタートでした。週2回・1回90分——わずか週3時間の質の高い学習時間を1年間積み重ねた結果、その生徒は平均点まで成績を伸ばしました。あと1年あれば、志望校にも手が届いていたはずです。
+        </p>
+        <p>
+          週にたった3時間、誰かに教えてもらえる時間があるだけで、子どもはここまで変われる。ならば、すべての子どもが平等にその時間を持てるべきだ——。そしてそれを実現できるのがAIだと、私は信じています。
+        </p>
+        <p>
+          AIは学力の底上げにとどまらず、子どもたちの将来の可能性そのものを広げます。AIを「禁止するもの」として扱う守りの情報教育ではなく、AIを使いこなして創造する側に立つための「攻めの情報教育」を。それが、創造的でおもしろく、強い日本をつくる道だと考えています。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Activity ── -->
+  <section class="activity-section section-pad" id="activity">
+    <div class="container">
+      <div class="activity-header fade-in">
+        <div class="section-header" style="margin-bottom:0">
+          <span class="section-num">03</span>
+          <span class="section-label-text">ACTIVITY</span>
+        </div>
+        <a href="/activities/" class="all-link">すべての活動を見る →</a>
+      </div>
+      <div class="activity-grid" style="margin-top: 3rem;">
+        {
+          activities.map((post, i) => (
+            <a
+              href={`/activities/${post.slug}/`}
+              class={`activity-card fade-in${i > 0 ? ` delay-${i}` : ''}`}
+            >
+              <time class="card-date" datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+              <h3 class="card-title">{post.data.title}</h3>
+              <p class="card-desc">{post.data.description}</p>
+              {post.data.tags && (
+                <div class="card-tags">
+                  {post.data.tags.map((tag) => (
+                    <span class="tag">#{tag}</span>
+                  ))}
+                </div>
+              )}
+              <span class="card-arrow">→</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section class="contact-section" id="contact">
+    <div class="contact-inner fade-in">
+      <div class="section-header" style="margin-bottom: 2.5rem;">
+        <span class="section-num">04</span>
+        <span class="section-label-text">CONTACT</span>
+      </div>
+      <h2 class="contact-heading">お気軽に<br />ご連絡ください</h2>
+      <p class="contact-desc">
+        教育×AIに関するご相談、取材・登壇のご依頼、<br />その他お問い合わせはXよりどうぞ。
+      </p>
+      <a
+        href="https://twitter.com/YOUR_HANDLE"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="contact-btn"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.261 5.636 5.905-5.636zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+          ></path>
+        </svg>
+        X (Twitter) でつながる
+      </a>
+    </div>
+  </section>
+</Layout>
