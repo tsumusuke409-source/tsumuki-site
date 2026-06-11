@@ -218,8 +218,8 @@ a {
 .hero-photo-frame img {
   position: absolute;
   right: 0;
-  top: 0;
-  width: 200%;
+  top: -60%;
+  width: 300%;
   max-width: none;
   height: auto;
 }
@@ -821,14 +821,14 @@ a {
     height: 100%;
   }
 
-  .hero-photo-frame img {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 200%;
-    max-width: none;
-    height: auto;
-    min-height: 100%;
+  .hero-photo-frame {
+    display: none;
+  }
+
+  .hero-photo-side {
+    background-image: url('/images/hero.jpg');
+    background-size: 260% auto;
+    background-position: right 42%;
   }
 
   .hero-text-side {
